@@ -52,7 +52,7 @@ public class AuthenticationController {
 		LoginResponse response=new LoginResponse();
 		response.setToken(jwtToken);
 		
-//200 response
+		//200 response
 		return ResponseEntity.ok(response);
 	}
 	
