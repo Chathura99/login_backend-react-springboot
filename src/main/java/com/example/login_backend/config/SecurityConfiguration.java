@@ -32,14 +32,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		
-		auth.inMemoryAuthentication().withUser("Chathura").password(passwordEncoder().encode("123456789"))
+		//in memory authentication with role
+		auth.inMemoryAuthentication()
+				.withUser("Chathura")
+				.password(passwordEncoder().encode("123456789"))
 				.authorities("USER", "ADMIN");
 
 		auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
 
 	}
-
+//for encode password, without -> error
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -50,15 +52,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-
+//http basic authentication
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+		//	all protected after '/**'
+		// antMatchers("/index.html").permitAll()
+		// antMatchers("/admin/**").hasRole("ADMIN")
+		// antMatchers("/index.html").hasAnyRole("ADMIN","MANAGER")
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling()
 				.authenticationEntryPoint(authenticationEntryPoint).and()
-				.authorizeRequests((request) -> request.antMatchers("/h2-console/**", "/api/v1/auth/login").permitAll()
-						.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
-				.addFilterBefore(new JWTAuthenticationFilter(userService, jWTTokenHelper),
+				.authorizeRequests((request) -> request.antMatchers("/h2-console/**", "/api/v1/auth/login")
+						.permitAll()
+						.antMatchers(HttpMethod.OPTIONS, "/**")
+						.permitAll()
+						.anyRequest()
+						.authenticated())
+						.addFilterBefore(new JWTAuthenticationFilter(userService, jWTTokenHelper),
 						UsernamePasswordAuthenticationFilter.class);
 
 		http.csrf().disable().cors().and().headers().frameOptions().disable();
