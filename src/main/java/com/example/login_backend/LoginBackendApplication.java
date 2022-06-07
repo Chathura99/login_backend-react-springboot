@@ -25,7 +25,7 @@ public class LoginBackendApplication {
 		System.out.println("Can login!");
 	}
 
-
+///to dbInit
 //	@PostConstruct
 //	protected void init() {
 //

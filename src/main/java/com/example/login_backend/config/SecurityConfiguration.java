@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		//in memory authentication with role
+		//withUser, password, roles, authority
 		auth.inMemoryAuthentication()
 				.withUser("Chathura")
 				.password(passwordEncoder().encode("123456789"))
@@ -41,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
 
 	}
-//for encode password, without -> error
+	//for encode password, without -> error
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -70,7 +71,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						.addFilterBefore(new JWTAuthenticationFilter(userService, jWTTokenHelper),
 						UsernamePasswordAuthenticationFilter.class);
 
-		http.csrf().disable().cors().and().headers().frameOptions().disable();
+		http
+				.csrf()
+				.disable()
+				.cors()
+				.and()
+				.headers()
+				.frameOptions()
+				.disable();
 
 	}
 
