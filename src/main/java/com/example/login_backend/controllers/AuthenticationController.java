@@ -52,19 +52,19 @@ public class AuthenticationController {
 		LoginResponse response=new LoginResponse();
 		response.setToken(jwtToken);
 		
-		//200 response
+		//200 OK response
 		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping("/auth/userinfo")
 	public ResponseEntity<?> getUserInfo(Principal user){
+		//call  service in here
 		User userObj=(User) userDetailsService.loadUserByUsername(user.getName());
-		
+		//userDetailsService call to repo
 		UserInfo userInfo=new UserInfo();
 		userInfo.setFirstName(userObj.getFirstName());
 		userInfo.setLastName(userObj.getLastName());
 		userInfo.setRoles(userObj.getAuthorities().toArray());
-		
 		
 		return ResponseEntity.ok(userInfo);
 	}

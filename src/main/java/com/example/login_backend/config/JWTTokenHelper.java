@@ -30,8 +30,6 @@ public class JWTTokenHelper {
 	
 	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
-
-	
 	private Claims getAllClaimsFromToken(String token) {
         Claims claims;
         try {
