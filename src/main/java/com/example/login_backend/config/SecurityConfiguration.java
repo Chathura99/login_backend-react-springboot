@@ -34,10 +34,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		//in memory authentication with role
 		//withUser, password, roles, authority
-		auth.inMemoryAuthentication()
-				.withUser("Chathura")
-				.password(passwordEncoder().encode("123456789"))
-				.authorities("USER", "ADMIN");
+//		auth.inMemoryAuthentication()
+//				.withUser("Yashodha")
+//				.password(passwordEncoder().encode("123456789"))
+//				.authorities("ADMIN");
 
 		auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
 
@@ -56,13 +56,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //http basic authentication
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//	all protected after '/**'
-		// antMatchers("/index.html").permitAll()
-		// antMatchers("/admin/**").hasRole("ADMIN")
-		// antMatchers("/index.html").hasAnyRole("ADMIN","MANAGER")
+//		all protected after '/**'
+//		antMatchers("/index.html").permitAll()
+//		antMatchers("/admin/**").hasRole("ADMIN")
+//		antMatchers("/index.html").hasAnyRole("ADMIN","MANAGER")
+
+
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling()
 				.authenticationEntryPoint(authenticationEntryPoint).and()
-				.authorizeRequests((request) -> request.antMatchers("/h2-console/**", "/api/v1/auth/login")
+				.authorizeRequests((request) -> request.antMatchers(
+						"/api/v1/auth/login",
+								"/api/v1/vws-home"
+
+						)
 						.permitAll()
 						.antMatchers(HttpMethod.OPTIONS, "/**")
 						.permitAll()
